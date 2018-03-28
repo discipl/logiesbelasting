@@ -11,13 +11,13 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator(
   {
-    Home: {
+    Thuis: {
       screen: HomeScreen,
     },
-    Links: {
+    Linkjes: {
       screen: LinksScreen,
     },
-    Settings: {
+    Instellingen: {
       screen: SettingsScreen,
     },
   },
@@ -27,16 +27,16 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Home':
+          case 'Thuis':
             iconName =
               Platform.OS === 'ios'
                 ? `ios-information-circle${focused ? '' : '-outline'}`
                 : 'md-information-circle';
             break;
-          case 'Links':
+          case 'Linkjes':
             iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
             break;
-          case 'Settings':
+          case 'Instellingen':
             iconName =
               Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
         }

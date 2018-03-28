@@ -36,7 +36,7 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
-            <Text style={styles.getStartedText}>hello iota!</Text>
+            <Text style={styles.getStartedText}>Goedeochtend blockchain!</Text>
 
             <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
               <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
@@ -49,7 +49,7 @@ export default class HomeScreen extends React.Component {
 
           <View style={styles.helpContainer}>
             <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t reload!</Text>
+              <Text style={styles.helpLinkText}>Help, just help</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
