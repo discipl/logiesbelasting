@@ -6,13 +6,14 @@ var tmpfile = require('./helpers/tmpfile.js')
 const discipl = require('discipl-core')
 const Mam = require('mam.client.js/lib/mam.node.js')
 const IOTA = require('iota.lib.js');
-const iotaConn = new discipl.connectors.iota(Mam, new IOTA({ provider: process.env.IOTANODEURL }))
+const iotaObj = new IOTA({ provider: process.env.IOTANODEURL })
+const iotaConn = new discipl.connectors.iota(Mam, iotaObj)
+
 
 const enrollHotelier = async () => {
-	
 	console.log("Hotelier enrollment")
 	console.log("DID generation on device hotelier using the hotelier enrollment service:")
-
+	debugger;
 	const hotelierSeed = await seedGen()
 	tmpfile.logInTmpFile('hotelier.seed', hotelierSeed)
 	console.log("Logged generated hotelier seed in file 'hotelier.seed'. This is kept private at hotelier devices.")
@@ -40,5 +41,13 @@ const enrollHotelier = async () => {
 	console.log('logged hotelierAttest in hotelier.attest and hotelierMamState in hotelier.state (to be held at hotelier devices)');
 }
 
-//console.log("Using IOTA node: "+process.env.IOTANODEURL)
-enrollHotelier();
+console.log("Using IOTA node: "+process.env.IOTANODEURL)
+iotaObj.api.getNodeInfo((error, success) => {
+  if (error) {
+    console.log(error)
+	process.exit(1)
+  } else {
+    console.log(success)
+	enrollHotelier();
+  }
+})
