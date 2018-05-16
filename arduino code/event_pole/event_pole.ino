@@ -1,136 +1,164 @@
-#include <SPI.h>
-#include "epd4in2.h"
-#include "epdpaint.h"
-#include <qrcode.h>
-
-#define COLORED     0
-#define UNCOLORED   1
-
 //-----------------------------------------------------------------------------------------------------
-void setup() {
-  // put your setup code here, to run once:
-
-  Serial.begin(115200);
-  pinMode(2, OUTPUT);
-  pinMode(3, INPUT);
-  /* This clears the SRAM of the e-paper display */
-}
+/*
+   Copyrighted, William Goudswaard, williamgoudswaard@gmail.com
+*/
 //-----------------------------------------------------------------------------------------------------
-void get_qr( QRCode &qrcode, char* input )
-{
-  //  QR data gets completely scrambled.
-  // Allocate a chunk of memory to store the QR code
-  uint8_t qrcodeBytes[qrcode_getBufferSize(3)];
-
-  qrcode_initText(&qrcode, qrcodeBytes, 3, 0, input);
-  Serial.println("derup");
-
-}
+#include <epd4in2.h>            //  Waveshare 4.2 b/w E-ink
+#include <qrcode.h>             //  Qr code
+#include <DS3231.h>             //  DS3231 RTC 
+#include <avr/sleep.h>          //  Standard AVR sleep library
+#include <avr/wdt.h>            //  Standard AVR watchdog library
 //-----------------------------------------------------------------------------------------------------
-void draw( QRCode &qrcode )
-{
-  uint32_t dt = millis();
-  Epd epd;
-  if (epd.Init() != 0) {
-    Serial.print("e-Paper init failed");
+const long event_nr = 1;        //  The event this pole belongs to
+const int pole_nr   = 1;        //  The exact pole at this event
+const int QR_time   = 24 >> 3;  //  Only multiplications of 8 as Watchdog timer will sleep for 8s at a time
+
+long press_count    = 0;        //  The number of button presses from power up.
+int sleep_counter   = 0;        //  Counter for the watchdog, to determine when to in deep_sleep
+bool deep_sleep     = false;    //  When the deep_sleep is true, the watchdog timer won't be needed anymore
+
+DS3231 rtc(SDA, SCL);           //  Attach the RTC to the i2c interface (A4, A5)
+Time t;                         //  Init a Time-data structure
+Epd epd;                        //  Init the E-ink display
+//-----------------------------------------------------------------------------------------------------
+void setup()
+{ //Serial.begin(115200);       //  For debugging purposes only
+  pinMode(2, INPUT);            //  The standard Arduino Nano interrupt pin
+  digitalWrite(2, HIGH);        //  Enable pull-up
+
+  rtc.begin();                  //  Init the RTC
+  rtc.enable32KHz(false);       //  Disable to save some power
+
+  if ( epd.Init() != 0 ) {      //  Init the E-ink
     return;
   }
-  /* This clears the SRAM of the e-paper display */
-  epd.ClearFrame();
+  epd.Sleep();                  //  Make it sleep to preserve power
+  //  The following lines can be uncommented to set the date and time
+  //rtc.setDOW(WEDNESDAY);      //  Set Day-of-Week to DAYOFWEEK
+  //rtc.setTime(15, 21, 30);    //  Set the time to 12:00:00 (24hr format)
+  //rtc.setDate(4, 25, 2018);   //  Set the date to month day, year
+}
+//-----------------------------------------------------------------------------------------------------
+void loop()
+{ //  The whole process takes about 4150ms
+  sleep();
+  generate_qr();
+}
+//-----------------------------------------------------------------------------------------------------
+void sleep()
+{
+  ADCSRA = 0;                   //  disable ADC
 
-  /*
-      Due to RAM not enough in Arduino UNO, a frame buffer is not allowed.
-      In this case, a smaller image buffer is allocated and you have to
-      update a partial display several times.
-      1 byte = 8 pixels, therefore you have to set 8*N pixels at a time.
-  */
+  if ( !deep_sleep )            //  Start counting after the QR code has been displayed.
+  {
+    sleep_counter++;
+    MCUSR = 0;                  //  Clear various "reset" flags
+    //  Allow changes, disable reset
+    WDTCSR = bit (WDCE) | bit (WDE);
+    //  Set interrupt mode and an interval
+    //  Set WDIE, and 8 seconds delay
+    WDTCSR = bit (WDIE) | bit (WDP3) | bit (WDP0);    
+    wdt_reset();                //  Reset the watchdog timer
+  }
 
-  unsigned char image[296];
-  Paint paint(image, 296, 8);    //width should be the multiple of 8
-  paint.SetWidth(8);
-  paint.SetHeight(8);
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  
+  //  Do not interrupt before we go to sleep, or the
+  //  ISR will detach interrupts and we won't wake.
+  noInterrupts();
+  
+  //  Will be called when pin D2 goes low
+  attachInterrupt(0, wake, FALLING);
+  EIFR = bit(INTF0);            //  Clear flag for interrupt 0
 
-  paint.Clear(UNCOLORED);
+  //  Turn off brown-out enable in software
+  //  BODS must be set to one and BODSE must be set to zero within four clock cycles
+  MCUCR = bit(BODS) | bit(BODS);
+  //  The BODS bit is automatically cleared after three clock cycles
+  MCUCR = bit(BODS);
 
+  //  We are guaranteed that the sleep_cpu call will be done
+  //  As the processor executes the next instruction after
+  //  Interrupts are turned on.
+  interrupts();                 //  One cycle
+  sleep_cpu();                  //  One cycle
+}
+//-----------------------------------------------------------------------------------------------------
+ISR (WDT_vect)                  //  Watchdog interrupt
+{
+  if ( sleep_counter < QR_time )
+  {
+    wdt_disable();              //  Disable watchdog
+    sleep();                    //  Go back to sleep
+  }
+  else if ( sleep_counter >= QR_time )
+  {
+    deep_sleep = true;
+    sleep_counter = 0;
+    if (epd.Init() != 0) {      //  Wake E-ink from sleep
+      return;
+    }
+    epd.ClearFrame();           //  Clear the SDRAM of the display
+    epd.DisplayFrame();         //  Black, because the SDRAM is empty
+    epd.Sleep();                //  Sleep the display when done
+    sleep();                    //  Go to deep sleep
+  }
+}  
+//-----------------------------------------------------------------------------------------------------
+void wake()
+{
+  sleep_disable();              //  Cancel sleep as a precaution
+  detachInterrupt(0);           //  Precautionary while we do other stuff
+  deep_sleep = false;           //  Disable deep sleep
+  sleep_counter = 0;            //  Reset the sleep counter
+}
+//-----------------------------------------------------------------------------------------------------
+void generate_qr()
+{
+  press_count++;                //  Increment the press counter
+  t = rtc.getTime();            //  Get the time from the RTC
+
+  String input = "";            //  Strings in c++ are shit
+  input += event_nr;    input += ",";
+  input += pole_nr;     input += ",";
+  input += press_count; input += ",";
+  input += rtc.getUnixTime(t);
+
+  char* qr_data = const_cast<char*>(input.c_str());
+  //  Allocate a chunk of memory to store the QR code
+  uint8_t qrcodeBytes[qrcode_getBufferSize(5)];
+
+  QRCode qrcode;
+  //  Generating with high error correction seems to be faster: 1560ms
+  //  We use version 5 because the screen can only display multiples of 8
+  //  The screen height is 300px, so 300 / 8 = 37,5 a version 5 QR is 37x37 modules
+  qrcode_initText(&qrcode, qrcodeBytes, 5, ECC_HIGH, qr_data);
+  draw(qrcode);
+}
+//-----------------------------------------------------------------------------------------------------
+void draw(QRCode &qrcode)
+{ //  Init, clearing and sending to sdram takes about 495ms
+  if (epd.Init() != 0) {        //  Wake E-ink from sleep
+    return;
+  }
+  epd.ClearFrame();             //  Clear the SDRAM of the display
+
+  //  Every module is a 8x8px black box.
+  //  290ms
   for ( int y = 0; y < qrcode.size; y++ )
   {
     for ( int x = 0; x < qrcode.size; x++ )
     {
       if ( qrcode_getModule(&qrcode, x, y) )
       {
-        paint.DrawFilledRectangle(0, 0, 8, 8, COLORED);
-        epd.SetPartialWindow(paint.GetImage(), (x * 8), (y * 8), paint.GetWidth(), paint.GetHeight());
+        epd.SetBlackBox(x * 8 + 104, y * 8 + 2);
       }
     }
-    Serial.println(y);
   }
-
-  /*
-    paint.Clear(UNCOLORED);
-    paint.DrawFilledRectangle(0, 0, 10, 10, COLORED);
-    epd.SetPartialWindow(paint.GetImage(), 0, 0, paint.GetWidth(), paint.GetHeight());
-    paint.DrawFilledRectangle(0, 0, 10, 10, COLORED);
-    epd.SetPartialWindow(paint.GetImage(), 30, 0, paint.GetWidth(), paint.GetHeight());
-  */
-
-  /* This displays the data from the SRAM in e-Paper module */
-  /*
-    dt = millis() - dt;
-    Serial.print("actual time: ");
-    Serial.print(dt);
-    Serial.print("\n");
-    epd.DisplayFrame();
-  */
-  /* This displays an image */
-  while ( !digitalRead(3) )
-  {
-    digitalWrite(2, HIGH);
-  }
-  digitalWrite(2, LOW);
-
-  epd.DisplayFrame();
-
-  /* Deep sleep */
-  epd.Sleep();
-}
-//-----------------------------------------------------------------------------------------------------
-void loop() {
-  //  Quick perf test.
-  uint32_t dt = millis();
-
-  QRCode qrcode;
-
-  char* input = "1bcdEfghijklmnoPqrstuvWxyZabcd:)";
-
-
-  //  QR data gets completely scrambled.
-  // Allocate a chunk of memory to store the QR code
-  uint8_t qrcodeBytes[qrcode_getBufferSize(5)];
-
-  qrcode_initText(&qrcode, qrcodeBytes, 5, 0, input);
-  Serial.println("derup");
-
-  //get_qr( qrcode, input );
-
-  for (uint8_t y = 0; y < qrcode.size; y++) {
-    // Each horizontal module
-    for (uint8_t x = 0; x < qrcode.size; x++) {
-      // Print each module (UTF-8 \u2588 is a solid block)
-      Serial.print(qrcode_getModule(&qrcode, x, y) ? "\u2588" : "  ");
-    }
-    Serial.print("\n");
-  }
-
-  draw( qrcode );
-
-
-  //  perf
-  dt = millis() - dt;
-  Serial.print("QR Code Generation Time: ");
-  Serial.print(dt);
-  Serial.print("\n");
-  // put your main code here, to run repeatedly:
-  // The structure to manage the QR code
+  //  After the SDRAM is updated, the screen will refresh, and draw the new image
+  epd.DisplayFrame();           //  2090ms
+  epd.Sleep();                  //  Sleep the display when done
 }
 //-----------------------------------------------------------------------------------------------------
 //  EOF

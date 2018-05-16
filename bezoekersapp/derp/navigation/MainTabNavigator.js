@@ -11,14 +11,14 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 export default TabNavigator(
   {
-    Thuis: {
+    "My hotel": {
       screen: HomeScreen,
     },
-    Linkjes: {
-      screen: LinksScreen,
-    },
-    Instellingen: {
+    "Scan event": {
       screen: SettingsScreen,
+    },
+    "Event ratings": {
+      screen: LinksScreen,
     },
   },
   {
@@ -27,18 +27,18 @@ export default TabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case 'Thuis':
+          case 'My hotel':
             iconName =
               Platform.OS === 'ios'
-                ? `ios-information-circle${focused ? '' : '-outline'}`
-                : 'md-information-circle';
+                ? `ios-map${focused ? '' : '-outline'}`
+                : 'md-map';
             break;
-          case 'Linkjes':
-            iconName = Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link';
+          case 'Event ratings':
+            iconName = Platform.OS === 'ios' ? `ios-list${focused ? '' : '-outline'}` : 'md-list';
             break;
-          case 'Instellingen':
+          case 'Scan event':
             iconName =
-              Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options';
+              Platform.OS === 'ios' ? `ios-camera${focused ? '' : '-outline'}` : 'md-camera';
         }
         return (
           <Ionicons
