@@ -6,7 +6,7 @@ var tmpfile = require('./helpers/tmpfile.js')
 const discipl = require('discipl-core')
 const Mam = require('mam.client.js/lib/mam.node.js')
 const IOTA = require('iota.lib.js');
-const iotaObj = new IOTA({ provider: process.env.IOTANODEURL })
+const iotaObj = new IOTA({ provider: '167.99.37.75:80' })
 const iotaConn = new discipl.connectors.iota(Mam, iotaObj)
 
 
