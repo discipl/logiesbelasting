@@ -1,0 +1,52 @@
+C:\Users\Menno\IdeaProjects\logiesbelasting\bezoekersapp\derp\writeIOTA>node uc1-enroll-hotelier.js
+Using IOTA node: undefined
+{ appName: 'IRI',
+  appVersion: '1.4.2.2',
+  jreAvailableProcessors: 4,
+  jreFreeMemory: 544566168,
+  jreVersion: '1.8.0_151',
+  jreMaxMemory: 3817865216,
+  jreTotalMemory: 3530555392,
+  latestMilestone: 'XXNENGVLGDOFGIN9KHFEUXQGEVTAXWUSKYUQQADIRBHC9EKSFHZPS9D9ILMDAMCWMUYXWWRRQVKQZ9999',
+  latestMilestoneIndex: 453683,
+  latestSolidSubtangleMilestone: 'XXNENGVLGDOFGIN9KHFEUXQGEVTAXWUSKYUQQADIRBHC9EKSFHZPS9D9ILMDAMCWMUYXWWRRQVKQZ9999',
+  latestSolidSubtangleMilestoneIndex: 453683,
+  neighbors: 6,
+  packetsQueueSize: 0,
+  time: 1526495934401,
+  tips: 12204,
+  transactionsToRequest: 1,
+  duration: 1 }
+Hotelier enrollment
+DID generation on device hotelier using the hotelier enrollment service:
+Logged generated hotelier seed in file 'hotelier.seed'. This is kept private at hotelier devices.
+hotelier DID: did:discipl:iotaRTUBCBZUATRNXZUEZGPPEFYSSXJIBUA9IOFEBVIJZWNUVLIS9KJKWIVXPDMPAZ9NJCMWQPZTNYDLDFJIL
+this DID may be reused within the lifetime of the hotelier wihtin this solution, probably tied to hotelier devices
+For later: This did could be logged in a IRMA wallet in the Hotelier device along with the hotelier seed.
+For later: The IRMA wallet could also be used to enroll the hotelier with a verifiably issued IBAN/name from Idin.
+Attestation done at municipality enrollment service server side (requires secret seed of municipality):
+logged mamstate of municipality in municipality.state to be kept private at municipality device. this way we don't need to find the latest message each time
+reference of hotelier attestation by municipality: GVXZXQJCELLKVXZJDTN9TGGRCDRQWBIGVTXEMMFEAKPMCUTOJBPYETSYYHASSQRXYCRB9HYRYAKXNWAIR
+this reference is given to the hotelier (stored at hotelier device(s))
+logged hotelierAttest in hotelier.attest and hotelierMamState in hotelier.state (to be held at hotelier devices)
+
+C:\Users\Menno\IdeaProjects\logiesbelasting\bezoekersapp\derp\writeIOTA>node uc2-enroll-recipient.js
+Recipient enrollment
+DID generation on device recipient using the recipient enrollment service:
+Logged generated recipient seed in file 'recipient.seed'. This is kept private at recipient devices.
+recipient DID: did:discipl:iotaQWXRSWJRBHBTMSPEEAHUXSULZTYGIWHRQOLBFNHGRCFGRQQTUXVYKFICKRXPXN9AJASZLWYJTGVZSUWJN
+this DID may be reused within the lifetime of the recipient wihtin this solution, probably tied to recipient devices
+For later: This did could be logged in a IRMA wallet in the recipient device along with the recipient seed.
+For later: The IRMA wallet could also be used to enroll the recipient with a verifiably issued IBAN/name from Idin.
+Attestation done at municipality enrollment service server side (requires secret seed / mamstate of municipality):
+logged mamstate of municipality in municipality.state to be kept private at municipality device. this way we don't need to find the latest message each time
+reference of recipient attestation by municipality: FZRBAUOCHYGCAOMHRDKINUIAXLVTXJPWNOALKEUYGKT9KJ9QBWCLIQISLYNYYXZDCOJ9YORQNQHLCUDOB
+this reference is given to the recipient (stored at recipient device(s))
+recipient attest reference stored in file recipient.attest
+
+C:\Users\Menno\IdeaProjects\logiesbelasting\bezoekersapp\derp\writeIOTA>node uc3-register-event.js
+Register Event
+Logged generated event seed in file 'event.seed'. This is kept private at recipient devices (including in voting poles coupled to this event).
+event DID: did:discipl:iotaFJSUJPRQJY9UNRIILCBTAXIIAFPMZVRXXZVSGAXPMWFWC99KIWEUQPUAJYMAEMLPCFFLMSXZPSVMZHCHL
+the DID of an event is published publicly and can be re-used within this use case
+Event reference: FJSUJPRQJY9UNRIILCBTAXIIAFPMZVRXXZVSGAXPMWFWC99KIWEUQPUAJYMAEMLPCFFLMSXZPSVMZHCHL
