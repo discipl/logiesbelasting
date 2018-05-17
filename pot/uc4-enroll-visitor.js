@@ -29,21 +29,23 @@ const enrollvisitor = async () => {
 
 	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateHotelier, JSON.stringify({'attestedVisitor':visitor}));
 	// Note that the API will soon include a method for attesting by reference like done above instead of keyed hashing of the claim : attestByReference();
-	visitorAttest = message.root
+	visitorAttest = message.address
 	console.log("Hotelier attested visitor. Reference: "+visitorAttest);
 
 	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateHotelier, JSON.stringify({startdate, duration, visitorAttest, hotelierAttest}));
 	// Note that the API will soon include a method for attesting by reference like done above instead of keyed hashing of the claim : attestByReference();
-	stayref = message.root
+	stayref = message.address
 	console.log("Hotelier claimed stay (startdate, duration, reference to visitor and hotelier attest). Reference: "+stayref);
 
 	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({"attestedStay":stayref}));
 	// Note that the API will soon include a method for attesting by reference like done above instead of keyed hashing of the claim : attestByReference();
-	stayAttest = message.root
+	stayAttest = message.address
 	console.log("Visitor attested stay claim (on its own device when possible). Reference: "+stayAttest)
 	
 	tmpfile.logInTmpFile('visitor.state', JSON.stringify(mamStateVisitor));
 	console.log('logged visitorMamState in visitor.state (to be held at visitor device)');
+	
+	tmpfile.logInTmpFile('hotelier.state', JSON.stringify(mamStateHotelier));
 }
 
 enrollvisitor()
