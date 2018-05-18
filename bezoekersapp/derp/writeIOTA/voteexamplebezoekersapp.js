@@ -11,16 +11,14 @@ var CryptoJS = require('crypto-js');
 
 const vote = async () => {
 
-    console.log('At the voting pole, we iterate the address sequence again)')
     eventnumber = 1; //Uit eventpaal
-    rating = myRating; // myRating wordt uit de app gehaald
+    eventrating = rating; // rating wordt uit de app gehaald
     timestamp = 'timestamp' //Timestamp in unix-tijd
 
-    var mamStateVisitor = JSON.parse(tmpfile.getFromTmpFile('visitor.state')) //Voorbeeldgebruiker voor x aantal dagen
+    var mamStateVisitor = JSON.parse('{"subscribed":[],"channel":{"side_key":null,"mode":"public","next_root":"FODDHV9FRQMFCOPOETOWFUNJYCVQVFUVJILQBCTNFDZXBUIFFTDCQYKKPQXPGAKIHT9SIXAGJRHBFYAQF","security":2,"start":1,"count":1,"next_count":1,"index":0},"seed":"AVEGUQJTV9ZWNVVRRVTVKERVUPWFJNLXVAO9NZIPIYFUOSUC9IFONSJCQPCXJYOLR9LYS9ALTILXAMYMJ"}') //Voorbeeldgebruiker voor x aantal dagen
 
     var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({eventnumber, rating, timestamp}))
     var voteref = message.root
-    var verifytoken = CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA384(token, pubkey)) //Pop-up message op app voor verificatie?
 }
 
 vote()

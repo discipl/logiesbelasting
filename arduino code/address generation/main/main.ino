@@ -1,4 +1,4 @@
-#include "main.h"
+//#include "main.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,9 +8,6 @@
 #include "common.h"
 #include "addresses.h"
 int counter = 0;
-//int print_help();
-//void address(char* seedChars, int index, int security, char* result);
-
 
 void setup()
 {
@@ -27,18 +24,17 @@ void loop()
   signed char seedBytes[48];
   chars_to_bytes(seedChars, seedBytes, 81);
   Serial.println(F("test_3"));
-  get_public_addr(seedBytes, 0, 2, address);
+  get_public_addr(seedBytes, 0, 0, address);
   Serial.println(F("test_4"));
 
   char charAddress[81];
   bytes_to_chars(address, charAddress, 48);
-  Serial.println("");
+  Serial.println(F(""));
   for (int i = 0; i < 81; i++)
   {
     Serial.print(charAddress[i]);
   }
-  Serial.println("");
+  Serial.println(F(""));
   counter++;
   Serial.println(counter);
-  Serial.println("");
 }
