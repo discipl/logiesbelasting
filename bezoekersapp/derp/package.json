@@ -10,12 +10,14 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "discipl-core": "^0.3.1",
-    "expo": "^25.0.1",
-    "package": "^1.0.1",
+    "expo": "^25.0.0",
     "react": "16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-star-rating": "^1.0.9",
-    "react-navigation": "^1.5.12"
+    "react-navigation": "^1.0.0-beta.27",
+    "discipl-core": "0.3.2",
+    "mam.client.js": "git+https://github.com/l3wi/mam.client.js.git#378248534abb332d9a70769039c8bbaa4c94d5ac",
+    "random-number-csprng": "1.0.2"
   },
   "devDependencies": {
     "jest-expo": "^25.0.0"
