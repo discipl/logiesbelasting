@@ -6,6 +6,7 @@
 #include <epd4in2.h>            //  Waveshare 4.2 b/w E-ink
 #include <qrcode.h>             //  Qr code
 #include <DS3231.h>             //  DS3231 RTC 
+#include <Wire.h>
 #include <avr/sleep.h>          //  Standard AVR sleep library
 #include <avr/wdt.h>            //  Standard AVR watchdog library
 //-----------------------------------------------------------------------------------------------------
@@ -17,8 +18,8 @@ long press_count    = 0;        //  The number of button presses from power up.
 int sleep_counter   = 0;        //  Counter for the watchdog, to determine when to in deep_sleep
 bool deep_sleep     = false;    //  When the deep_sleep is true, the watchdog timer won't be needed anymore
 
-DS3231 rtc(SDA, SCL);           //  Attach the RTC to the i2c interface (A4, A5)
-Time t;                         //  Init a Time-data structure
+RTClib RTC;                     //  Attach the RTC to the i2c interface (A4, A5)
+DateTime now;                   //  Init a Time-data structure
 Epd epd;                        //  Init the E-ink display
 //-----------------------------------------------------------------------------------------------------
 void setup()
@@ -26,8 +27,8 @@ void setup()
   pinMode(2, INPUT);            //  The standard Arduino Nano interrupt pin
   digitalWrite(2, HIGH);        //  Enable pull-up
 
-  rtc.begin();                  //  Init the RTC
-  rtc.enable32KHz(false);       //  Disable to save some power
+  Wire.begin();                 //  Init the RTC
+ 
 
   if ( epd.Init() != 0 ) {      //  Init the E-ink
     return;
@@ -117,13 +118,13 @@ void wake()
 void generate_qr()
 {
   press_count++;                //  Increment the press counter
-  t = rtc.getTime();            //  Get the time from the RTC
+  now = RTC.now();             //  Get the time from the RTC
 
   String input = "";            //  Strings in c++ are shit
   input += event_nr;    input += ",";
   input += pole_nr;     input += ",";
   input += press_count; input += ",";
-  input += rtc.getUnixTime(t);
+  input += now.unixtime();
 
   char* qr_data = const_cast<char*>(input.c_str());
   //  Allocate a chunk of memory to store the QR code
