@@ -32,6 +32,9 @@ export default class LinksScreen extends React.Component {
         selectedStar={(rating) => this.onStarRatingPress(rating)}
         fullStarColor={'gold'}
       />
+      <View style={styles.container}>
+        <Button title="Yea" containerViewStyle={{width: '100%', marginLeft: 0}}/>
+      </View>
     );
   }
 }
