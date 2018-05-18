@@ -20,5 +20,3 @@ const vote = async () => {
     var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({eventnumber, rating, timestamp}))
     var voteref = message.root
 }
-
-vote()

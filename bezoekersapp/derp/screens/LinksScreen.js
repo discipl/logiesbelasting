@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Constants } from 'expo';
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native'; // 0.16.0
+import vote from '../writeIOTA/voteexamplebezoekersapp';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -36,7 +37,7 @@ export default class LinksScreen extends React.Component {
         selectedStar={(rating) => this.onStarRatingPress(rating)}
         fullStarColor={'gold'}
       />
-      <Button title="Submit event claim!" containerViewStyle={{width: '50%', marginLeft: 0}}/>
+      <Button title="stuur evenement claim!" containerViewStyle={{width: '50%', marginLeft: 0}}/>
       </View>
     );
   }
