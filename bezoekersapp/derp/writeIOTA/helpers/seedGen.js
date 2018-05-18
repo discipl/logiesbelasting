@@ -1,5 +1,5 @@
 // Note : taken from: https://github.com/Haarlem/digitale-waardepapieren/blob/develop/ClaimServer/helpers/seedGen.js
-const crypto = require('crypto');
+//const crypto = require('crypto');
 const randomNumber = require("random-number-csprng");
 
 module.exports = async () => {
