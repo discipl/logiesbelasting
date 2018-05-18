@@ -7,7 +7,7 @@ const discipl = require('discipl-core')
 const Mam = require('mam.client.js/lib/mam.node.js')
 const IOTA = require('iota.lib.js');
 const iotaConn = new discipl.connectors.iota(Mam, new IOTA({ provider: 'http://167.99.37.75:80' }))
-var CryptoJS = require('crypto-js');
+//var CryptoJS = require('crypto-js');
 
 const vote = async () => {
 
