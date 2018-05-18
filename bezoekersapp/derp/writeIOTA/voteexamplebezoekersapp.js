@@ -11,7 +11,6 @@ var CryptoJS = require('crypto-js');
 
 const vote = async () => {
 
-    console.log('At the voting pole, we iterate the address sequence again)')
     eventnumber = 1; //Uit eventpaal
     rating = myRating; // myRating wordt uit de app gehaald
     timestamp = 'timestamp' //Timestamp in unix-tijd
