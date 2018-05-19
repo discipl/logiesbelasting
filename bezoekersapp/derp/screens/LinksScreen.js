@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Constants } from 'expo';
 import { View, StyleSheet } from 'react-native';
 import { Button } from 'react-native'; // 0.16.0
-import vote from '../writeIOTA/voteexamplebezoekersapp';
+import vote from '../writeIOTA/use-cases/voteexamplebezoekersapp';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
