@@ -17,10 +17,11 @@ const enrollvisitor = async () => {
 	console.log("Logged generated visitor seed in file 'visitor.seed'. This is kept private at visitor devices.")
 	
 	var mamStateVisitor = discipl.initState(iotaConn, visitorSeed)
+	var numberOfDays = 1000 //To be changed later
 	const visitor = await discipl.getDid(iotaConn, mamStateVisitor)
 	console.log("visitor DID: " + visitor)
 	console.log("this DID may be reused within this use case (a DID for each stay)")
-	const duration = Math.floor((Math.random() * Math.floor(10))+1).toString(); // 1 to 10 days
+	const duration = numberOfDays.toString(); // 1 to 10 days
 	const startdate = (new Date()).toJSON().slice(0, 19).replace(/[-T]/g, ':');
 	console.log("in this example this visitor stays for "+duration+" (duration) nights starting on "+startdate+" (startdate)");
 	

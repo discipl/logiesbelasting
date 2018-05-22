@@ -1,5 +1,9 @@
-import React from 'react';
 import StarRating from 'react-native-star-rating';
+import React, { Component } from 'react';
+import { Constants } from 'expo';
+import { View, StyleSheet } from 'react-native';
+import { Button } from 'react-native'; // 0.16.0
+import vote from '../writeIOTA/use-cases/voteexamplebezoekersapp';
 
 export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -21,6 +25,7 @@ export default class LinksScreen extends React.Component {
 
   render() {
     return (
+      <View style={styles.container}>
       <StarRating
         disabled={false}
         emptyStar={'ios-star-outline'}
@@ -32,6 +37,17 @@ export default class LinksScreen extends React.Component {
         selectedStar={(rating) => this.onStarRatingPress(rating)}
         fullStarColor={'gold'}
       />
+      <Button title="stuur evenement claim!" containerViewStyle={{width: '50%', marginLeft: 0}}/>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 0,
+    justifyContent: 'center',
+    paddingTop: Constants.statusBarHeight,
+    backgroundColor: '#ecf0f1'
+  },
+});
