@@ -9,7 +9,7 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
-    "discipl-core": "0.3.2",
+    "discipl-core": "0.3.3",
     "mam.client.js": "git+https://github.com/l3wi/mam.client.js.git#378248534abb332d9a70769039c8bbaa4c94d5ac",
     "random-number-csprng": "1.0.2"
   }
