@@ -17,8 +17,8 @@ const enrollrecipient = async () => {
 	tmpfile.logInTmpFile('recipient.seed', recipientSeed)
 	console.log("Logged generated recipient seed in file 'recipient.seed'. This is kept private at recipient devices.")
 	
-	var mamStaterecipient = discipl.initState(iotaConn, recipientSeed)
-	const recipient = await discipl.getDid(iotaConn, mamStaterecipient)
+	var mamStateRecipient = discipl.initState(iotaConn, recipientSeed)
+	const recipient = await discipl.getDid(iotaConn, mamStateRecipient)
 	console.log("recipient DID: " + recipient)
 	console.log("this DID may be reused within the lifetime of the recipient wihtin this solution, probably tied to recipient devices")
 	console.log("For later: This did could be logged in a IRMA wallet in the recipient device along with the recipient seed.")
@@ -26,15 +26,16 @@ const enrollrecipient = async () => {
 	
 	console.log("Attestation done at municipality enrollment service server side (requires secret seed / mamstate of municipality):")
 	var mamStateMunicipality  = JSON.parse(tmpfile.getFromTmpFile('municipality.state'));
-	var {mamState, message, attachResult} = await discipl.claim(iotaConn, mamStateMunicipality, JSON.stringify({'attestedrecipient':recipient}));
+	var {mamState, message, attachResult} = await discipl.claim(iotaConn, mamStateMunicipality, JSON.stringify({'attestedRecipient':recipient}));
 	// Note that the API will soon include a method for attesting by reference like done above instead of keyed hashing of the claim : attestByReference();
 	tmpfile.logInTmpFile('municipality.state', JSON.stringify(mamState));
 	console.log("logged mamstate of municipality in municipality.state to be kept private at municipality device. this way we don't need to find the latest message each time");
 	
-	const recipientAttest = message.root;
+	const recipientAttest = message.address;
 	console.log("reference of recipient attestation by municipality: "+recipientAttest);
 	console.log("this reference is given to the recipient (stored at recipient device(s))");
 	tmpfile.logInTmpFile('recipient.attest', recipientAttest);
+	tmpfile.logInTmpFile('recipient.state', JSON.stringify(mamStateRecipient));
 	console.log("recipient attest reference stored in file recipient.attest");
 }
 

@@ -15,6 +15,7 @@ const registerevent = async () => {
 	tmpfile.logInTmpFile('event.seed', eventSeed)
 	console.log("Logged generated event seed in file 'event.seed'. This is kept private at recipient devices (including in voting poles coupled to this event).")
 	
+	var mamStateRecipient = JSON.parse(tmpfile.getFromTmpFile('recipient.state'))
 	var mamStateEvent  = discipl.initState(iotaConn, eventSeed)
 	const didEvent = await discipl.getDid(iotaConn, mamStateEvent)
 	console.log("event DID: " + didEvent)
@@ -22,10 +23,11 @@ const registerevent = async () => {
 	const recipientAttest = tmpfile.getFromTmpFile('recipient.attest')
 	const name = 'My Event';
 	const description = 'Party @ De Rotterdam';
-	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateEvent, JSON.stringify({didEvent, name, description, recipientAttest}))
+	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateRecipient, JSON.stringify({'attestedEvent':didEvent, name, description, recipientAttest}))
 	const eventref = message.root
 	console.log('Event reference: '+eventref);
 	tmpfile.logInTmpFile('event.state', JSON.stringify(mamStateEvent));
+	tmpfile.logInTmpFile('recipient.state', JSON.stringify(mamState));
 }
 
 registerevent()

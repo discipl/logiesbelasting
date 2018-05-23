@@ -59,7 +59,8 @@ const vote = async () => {
 	
 	token =  CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA384(iotatoken.api._newAddress(eventSeed,i,1,false), pubkey));
 	var mamStateEvent = JSON.parse(tmpfile.getFromTmpFile('event.state'))
-	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateEvent, JSON.stringify({i, token, pubkey}))
+	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateEvent, JSON.stringify({'index':i, 'token':token, 'pubkey':pubkey}))
+	tmpfile.logInTmpFile('event.state', JSON.stringify(mamStateEvent))
 	var claimref = message.root
 	var hashedtoken = token;
 	console.log('registered hashed token : '+hashedtoken+' in claim : '+claimref+' along with pubkey: '+pubkey)
@@ -74,7 +75,10 @@ const vote = async () => {
 	
 	var mamStateVisitor = JSON.parse(tmpfile.getFromTmpFile('visitor.state'))
 
-	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({token, rating, timestamp}))
+	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({'vote':token, 'rating':rating, 'ts':timestamp}))
+	
+	tmpfile.logInTmpFile('visitor.state', JSON.stringify(mamStateVisitor));
+	
 	var voteref = message.root
 	// Note that the API will soon include a method for attesting by reference like done above instead of keyed hashing of the claim : attestByReference();
 	console.log("Placed vote : token: "+token+", rating: "+rating+" reference: "+voteref)
