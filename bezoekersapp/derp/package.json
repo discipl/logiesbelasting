@@ -19,6 +19,7 @@
     "react-native-star-rating": "^1.0.9",
     "react-navigation": "^1.0.0-beta.27",
     "rn-nodeify": "^10.0.0"
+    "fs": "react-native-level-fs"
   },
   "devDependencies": {
     "jest-expo": "^25.0.0"
