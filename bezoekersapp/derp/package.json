@@ -11,6 +11,7 @@
     "@expo/samples": "2.1.1",
     "discipl-core": "0.3.2",
     "expo": "^25.0.0",
+    "fs": "react-native-level-fs",
     "mam.client.js": "git+https://github.com/l3wi/mam.client.js.git#378248534abb332d9a70769039c8bbaa4c94d5ac",
     "package": "^1.0.1",
     "random-number-csprng": "1.0.2",
@@ -19,7 +20,6 @@
     "react-native-star-rating": "^1.0.9",
     "react-navigation": "^1.0.0-beta.27",
     "rn-nodeify": "^10.0.0"
-    "fs": "react-native-level-fs"
   },
   "devDependencies": {
     "jest-expo": "^25.0.0"
