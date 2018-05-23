@@ -6,8 +6,6 @@ var tmpfile = require('./helpers/tmpfile.js')
 const discipl = require('discipl-core')
 const Mam = require('mam.client.js/lib/mam.node.js')
 const IOTA = require('iota.lib.js');
-
-
 const iotaObj = new IOTA({ provider: process.env.IOTANODEURL })
 iotaObj.api.getNodeInfo((error, success) => {
   if (error) {
@@ -18,6 +16,7 @@ iotaObj.api.getNodeInfo((error, success) => {
 })
 
 const iotaConn = new discipl.connectors.iota(Mam, iotaObj)
+
 
 
 const ldexport = async () => {

@@ -18,6 +18,7 @@ const initMunicipality = async () => {
 	console.log("Municipality DID: " + didMunicipality)
 	console.log("The DID of the municipality should be published publicly and can be re-used within the lifetime of the whole solution")
 	console.log("This DID is the root of the public channel of the municipality")
+	tmpfile.logInTmpFile('municipality.state', JSON.stringify(mamStateMunicipality));
 }
 
 initMunicipality();
