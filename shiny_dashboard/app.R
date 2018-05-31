@@ -5,11 +5,11 @@ library(DT)
 
 ui <- fluidPage(
   sidebarLayout(
-    sidebarPanel(tags$h1("Most popular events"), br(), br(),
+    sidebarPanel(tags$h1("Meest bezochte events"), br(), br(),
       sliderInput(inputId = "num",
-        label = "Choose the number of events you want to show",
+        label = "Kies het aantal events dat getoond moet worden",
         value = 5, min = 1, max = 20), br(), br(),
-      actionButton("reloadButton", "Reload XML file")
+      actionButton("reloadButton", "Haal data opnieuw op")
     ),
     mainPanel(
       height = 8,
