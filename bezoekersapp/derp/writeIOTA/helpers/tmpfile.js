@@ -1,5 +1,5 @@
 
-var fs = require('AsyncStorage');
+var fs = require('fs');
 
 const logInTmpFile = (file, src) => {
   fs.open(file,'w',(err, fd) => {
