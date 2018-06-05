@@ -1,6 +1,3 @@
-//Creates an example XML file with 100000 event claims containing event number,
-//rating (1-5) and timestamps from 5 months before current UNIX time
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -56,7 +53,7 @@ public class CreateEventXML {
             bw.newLine();
             bw.write("<ratingeventlijst xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">");
             bw.newLine();
-            for(int i = 0; i < 100000; i++) {
+            for(int i = 0; i < 1000; i++) {
                 int event = grabEvent();
                 double rating = grabRating(event);
                 long timestamp = generateUnix();

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ratingeventlijst xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <startrating>
+      <event>Event70</event><rating>3.9666313386420042</rating><timestamp>1519191404</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event60</event><rating>2.0172156823569676</rating><timestamp>1518483023</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event50</event><rating>4.579676402524503</rating><timestamp>1525491992</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event27</event><rating>2.3542349349011316</rating><timestamp>1516706325</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event67</event><rating>4.619303362729119</rating><timestamp>1523741944</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event48</event><rating>4.124033142461298</rating><timestamp>1523923734</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event66</event><rating>3.889816339826289</rating><timestamp>1515051906</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event83</event><rating>2.1127481992582915</rating><timestamp>1519961920</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event52</event><rating>1.685709483796044</rating><timestamp>1521663797</timestamp>
+  </startrating>
+  <startrating>
+      <event>Event52</event><rating>2.8196951772571186</rating><timestamp>1527241068</timestamp>
+  </startrating>
+</ratingeventlijst>
