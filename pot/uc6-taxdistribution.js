@@ -47,7 +47,7 @@ const validateVote = async (sref, tokens) => {
 		var verifytoken = CryptoJS.enc.Base64.stringify(CryptoJS.HmacSHA384(sref.vote, tokens[t].pubkey))
 		if(verifytoken == t) {
 			tokens[t].rating = sref.rating
-			tokens[t].ts = sref.timestamp
+			tokens[t].ts = sref.ts
 			return tokens[t]
 		}
 	}
@@ -92,6 +92,7 @@ const distributetax = async (vcdata, totalamount) => {
 	
 	// process votes
 	var visitorVotes = []
+	var dashboardXML = "<ratingeventlijst>\n";
 	for(var href in vcdata) {
 		if(vcdata[href] && vcdata[href][attestedHotelier]) {
 			var hotelierDid = vcdata[href][attestedHotelier]
@@ -103,6 +104,7 @@ const distributetax = async (vcdata, totalamount) => {
 							var t = await validateVote(vcdata[href][data][vref][data][sref], tokens)
 							if(t && t.eventt && (visitorVotes[visitorDid] != t.eventt)) {
 								console.log('visitor '+visitorDid+' voted sucessfully for event '+t.eventt+' with rating: '+t.rating+' at '+t.ts+'.')
+								dashboardXML += "\t<startrating><event>"+t.eventt+'</event><rating>'+t.rating+'</rating><timestamp>'+t.ts+"</timestamp></startrating>\n";
 								score[t.recipient] += parseInt(t.rating)
 								totalscore += parseInt(t.rating)
 								visitorVotes[t.eventt] = true
@@ -116,6 +118,7 @@ const distributetax = async (vcdata, totalamount) => {
 			}
 		}
 	}
+	dashboardXML += "</ratingeventlijst>\n";
 	
 	// process score
 	for(rec in score) {
@@ -123,6 +126,8 @@ const distributetax = async (vcdata, totalamount) => {
 		console.log('Recipient '+rec+' receives EU '+grant+' on its IBAN');
 	}
 	
+	tmpfile.logInTmpFile('dashboard.xml', dashboardXML);
+	console.log('Stored	dashboard rating information in dashboard.xml...');
 }
 
 const taxdistribution = async () => {

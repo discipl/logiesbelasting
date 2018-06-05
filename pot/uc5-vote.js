@@ -69,7 +69,7 @@ const vote = async () => {
 	console.log('At the voting pole, we iterate the address sequence again)')
 	token =  iotatoken.api._newAddress(eventSeed,i,1,false);
 	rating = Math.floor((Math.random() * Math.floor(5)) + 1).toString(); // rating 1 to 5 stars
-	timestamp = 'timestamp' 
+	timestamp = Date.now();
 	i++
 	tmpfile.logInTmpFile('iterator.state',i+"")
 	
