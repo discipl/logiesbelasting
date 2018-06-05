@@ -75,13 +75,15 @@ const distributetax = async (vcdata, totalamount) => {
 			for(var eref in vcdata[rref][data]) {
 				if(vcdata[rref][data][eref] && vcdata[rref][data][eref][attestedEvent]) {
 					var eventDid = vcdata[rref][data][eref][attestedEvent]
-					console.log("event: "+eventDid)
+					var eventName = vcdata[rref][data][eref]['name']+' ('+vcdata[rref][data][eref]['description']+')'
+					console.log("event: "+eventDid+" "+eventName)
 					for(vref in vcdata[rref][data][eref][data]) {
 						if(vcdata[rref][data][eref][data][vref][token]) {
 							var t = vcdata[rref][data][eref][data][vref]
 							console.log('found voting token '+t.token)
 							t.recipient = recipientDid
 							t.eventt = eventDid
+							t.eventn = eventName
 							tokens[t.token] = t
 						}
 					}
@@ -104,7 +106,7 @@ const distributetax = async (vcdata, totalamount) => {
 							var t = await validateVote(vcdata[href][data][vref][data][sref], tokens)
 							if(t && t.eventt && (visitorVotes[visitorDid] != t.eventt)) {
 								console.log('visitor '+visitorDid+' voted sucessfully for event '+t.eventt+' with rating: '+t.rating+' at '+t.ts+'.')
-								dashboardXML += "\t<startrating><event>"+t.eventt+'</event><rating>'+t.rating+'</rating><timestamp>'+t.ts+"</timestamp></startrating>\n";
+								dashboardXML += "\t<startrating><event>"+t.eventn+'</event><rating>'+t.rating+'</rating><timestamp>'+t.ts+"</timestamp></startrating>\n";
 								score[t.recipient] += parseInt(t.rating)
 								totalscore += parseInt(t.rating)
 								visitorVotes[t.eventt] = true
