@@ -29,7 +29,8 @@ const enrollvisitor = async () => {
 	stayref = message.root //Claims van de hotelier; attesteert de visitor en zijn verblijf
 
 	//EINDE CLAIMS OP DE HOTELIERHARDWARE
-	//Stuur ID, visitor.seed, visitor.state en stayref via QR door naar app (misschien ook startdatum/aantal dagen voor verificatie)
+	//Stuur visitor, mamStateVisitor en stayref via QR door naar app (misschien ook startdatum/aantal dagen voor verificatie)
+	//Hierna: visitor, mamStateVisitor bewaren op app, stayref en aantal dagen kunnen weggegooid worden
 	//START CLAIM OP DE VISITOR APP
 
 	var { mamState, message, attachResult } = await discipl.claim(iotaConn, mamStateVisitor, JSON.stringify({"attestedStay":stayref}));
