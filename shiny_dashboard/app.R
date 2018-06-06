@@ -18,14 +18,14 @@ ui <- fluidPage(
   )
 )
 
-xmldataframe <- xmlToDataFrame("ratinglijst.xml")
+xmldataframe <- xmlToDataFrame("dashboard.xml")
 newdataframe <- as.data.frame(table(xmldataframe$event))
 newdataframe2 <- newdataframe[order(-newdataframe$Freq),]
 
 server <- function(input, output, session) {
   observeEvent(eventExpr = input$reloadButton, {
     showNotification("Reloading XML file, this might take a while")
-    xmldataframe <- xmlToDataFrame("ratinglijst.xml")
+    xmldataframe <- xmlToDataFrame("dashboard.xml")
     newdataframe <- as.data.frame(table(xmldataframe$event))
     newdataframe2 <- newdataframe[order(-newdataframe$Freq),]
     showNotification("Updated XML file!")
