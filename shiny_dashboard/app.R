@@ -8,12 +8,12 @@ ui <- fluidPage(
     sidebarPanel(tags$h1("Meest bezochte events"), br(), br(),
       sliderInput(inputId = "num",
         label = "Kies het aantal events dat getoond moet worden",
-        value = 5, min = 1, max = 20), br(), br(),
+        value = 5, min = 1, max = 10), br(), br(),
       actionButton("reloadButton", "Haal data opnieuw op")
     ),
     mainPanel(
-      height = 8,
-      plotOutput("eventbarplot")
+      plotOutput("eventbarplot"),
+      height = 20
     )
   )
 )
@@ -30,11 +30,11 @@ server <- function(input, output, session) {
     newdataframe2 <- newdataframe[order(-newdataframe$Freq),]
     showNotification("Updated XML file!")
     output$eventbarplot <- renderPlot({
-      barplot(newdataframe2$Freq, names.arg = newdataframe2$Var1, xlim = c(0,input$num), ylim = c(0,max(newdataframe2$Freq, na.rm = TRUE)), las = 2, col = "darkgrey")
+      barplot(newdataframe2$Freq, names.arg = newdataframe2$Var1, xlim = c(0,input$num), ylim = c(0,max(newdataframe2$Freq, na.rm = TRUE)), las = 2, col = "red")
     })
   })
   output$eventbarplot <- renderPlot({
-    barplot(newdataframe2$Freq, names.arg = newdataframe2$Var1, xlim = c(0,input$num), ylim = c(0,max(newdataframe2$Freq, na.rm = TRUE)), las = 2, col = "darkgrey")
+    barplot(newdataframe2$Freq, names.arg = newdataframe2$Var1, xlim = c(0,input$num), ylim = c(0,max(newdataframe2$Freq, na.rm = TRUE)), las = 2, col = "red")
   })
 }
 
