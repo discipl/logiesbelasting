@@ -4,33 +4,33 @@ library(methods)
 library(DT)
 
 ui <- fluidPage(
-tabsetPanel(
-tabPanel("Activiteit",
-sidebarLayout(
-sidebarPanel(tags$h1("Meest bezochte events"), br(), br(),
-sliderInput(inputId = "num",
-label = "Kies het aantal events dat getoond moet worden",
-value = 5, min = 1, max = 10), br(), br(),
-actionButton("reloadButton", "Haal data opnieuw op")
-),
-mainPanel(
-plotOutput("eventbarplot"),
-height = 20
-)
-)
-),
-tabPanel("Populair",
-sidebarLayout(
-sidebarPanel(tags$h1("Events until last transaction"), br(), br(),
-actionButton("reloadButton2", "Reload XML file")
-),
-mainPanel(
-height = 8,
-plotOutput("eventgraph")
-)
-)
-)
-)
+  tabsetPanel(
+    tabPanel("Activiteit",
+      sidebarLayout(
+        sidebarPanel(tags$h1("Meest bezochte events"), br(), br(),
+          sliderInput(inputId = "num",
+            label = "Kies het aantal events dat getoond moet worden",
+            value = 5, min = 1, max = 10), br(), br(),
+          actionButton("reloadButton", "Haal data opnieuw op")
+        ),
+        mainPanel(
+          plotOutput("eventbarplot"),
+          height = 20
+        )
+      )
+    ),
+    tabPanel("Populair",
+      sidebarLayout(
+        sidebarPanel(tags$h1("Events until last transaction"), br(), br(),
+          actionButton("reloadButton2", "Reload XML file")
+        ),
+        mainPanel(
+          height = 8,
+          plotOutput("eventgraph")
+        )
+      )
+    )
+  )
 )
 
 xmldataframe <- xmlToDataFrame("dashboard.xml")
