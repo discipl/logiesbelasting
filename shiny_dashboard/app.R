@@ -58,7 +58,7 @@ server <- function(input, output, session) {
         numbins <- cut(newdataframepop, 20)
         showNotification("XML file geupdated!")
         output$eventgraph <- renderPlot({
-            plot(numbins, xaxt = 'n', col = "blue")
+            plot(numbins, xaxt = 'n', xlab = paste("Transacties van ", as.POSIXct(as.numeric(as.character(min(newdataframepop / 1000))),origin="1970-01-01",tz="CET"), " tot ", as.POSIXct(as.numeric(as.character(max(newdataframepop / 1000))),origin="1970-01-01",tz="CET")), col = "blue")
         })
     })
     output$eventbarplot <- renderPlot({
